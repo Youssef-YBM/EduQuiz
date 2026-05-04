@@ -1,0 +1,73 @@
+<div class="container mt-4" *ngIf="quiz">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+          <h3 class="mb-0"><i class="fa fa-trophy me-2"></i>Résultats du Quiz</h3>
+        </div>
+        
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <div class="display-1 mb-3">{{ score | number:'1.0-0' }}%</div>
+            <div class="progress mb-3" style="height: 30px;">
+              <div class="progress-bar {{ getScoreClass() }}" [style.width.%]="score">{{ score }}%</div>
+            </div>
+            <h4>{{ getFeedback() }}</h4>
+          </div>
+          
+          <div class="row text-center mb-4">
+            <div class="col-md-4">
+              <div class="border rounded p-3">
+                <i class="fa fa-check-circle fa-2x text-success"></i>
+                <h5 class="mt-2">Bonnes réponses</h5>
+                <p class="h3">{{ correctAnswers }} / {{ totalQuestions }}</p>
+              </div>
+            </div>
+            
+            <div class="col-md-4">
+              <div class="border rounded p-3">
+                <i class="fa fa-hourglass-half fa-2x text-primary"></i>
+                <h5 class="mt-2">Temps</h5>
+                <p class="h3">{{ formatTime(timeSpent) }}</p>
+              </div>
+            </div>
+            
+            <div class="col-md-4">
+              <div class="border rounded p-3">
+                <i class="fa fa-star fa-2x text-warning"></i>
+                <h5 class="mt-2">Note / 20</h5>
+                <p class="h3">{{ (score / 5) | number:'1.1-1' }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <h4 class="mb-3">Détail des questions</h4>
+          <div class="accordion mb-4">
+            <div class="accordion-item" *ngFor="let question of quiz.questions; let i = index">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i">
+                  Question {{ i + 1 }}
+                  <span *ngIf="userAnswers[i] === question.correctIndex" class="text-success ms-2">✓</span>
+                  <span *ngIf="userAnswers[i] !== question.correctIndex && userAnswers[i] !== -1" class="text-danger ms-2">✗</span>
+                </button>
+              </h2>
+              <div [id]="'collapse' + i" class="accordion-collapse collapse" data-bs-parent="#questionsAccordion">
+                <div class="accordion-body">
+                  <p><strong>{{ question.text }}</strong></p>
+                  <p><strong>Votre réponse :</strong> {{ userAnswers[i] !== -1 ? getLetter(userAnswers[i]) + '. ' + question.answers[userAnswers[i]] : 'Non répondue' }}</p>
+                  <p><strong>Bonne réponse :</strong> {{ getLetter(question.correctIndex) + '. ' + question.answers[question.correctIndex] }}</p>
+                  <p *ngIf="question.explanation"><strong>Explication :</strong> {{ question.explanation }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-secondary" (click)="goHome()"><i class="fa fa-home"></i> Retour aux quiz</button>
+            <button class="btn btn-primary" (click)="retryQuiz()"><i class="fa fa-repeat"></i> Rejouer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

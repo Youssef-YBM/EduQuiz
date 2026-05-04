@@ -1,0 +1,9 @@
+<div class="text-center">
+  <div class="progress mb-2" style="height: 5px;">
+    <div class="progress-bar" [style.width.%]="getProgressPercentage()"></div>
+  </div>
+  <div>
+    <i class="fa fa-hourglass-half me-1"></i>
+    <span style="font-size: 1.5rem; font-weight: bold;">{{ getFormattedTime() }}</span>
+  </div>
+</div>

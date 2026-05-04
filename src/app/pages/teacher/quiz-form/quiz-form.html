@@ -1,0 +1,92 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">{{ isEditMode ? 'Modifier le quiz' : 'Créer un quiz' }}</h3>
+        </div>
+        
+        <div class="card-body">
+          <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label class="form-label">Titre du quiz *</label>
+              <input type="text" class="form-control" formControlName="title">
+              <div class="text-danger" *ngIf="quizForm.get('title')?.invalid && quizForm.get('title')?.touched">
+                Le titre est requis (min 3 caractères)
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Description *</label>
+              <textarea class="form-control" rows="3" formControlName="description"></textarea>
+              <div class="text-danger" *ngIf="quizForm.get('description')?.invalid && quizForm.get('description')?.touched">
+                La description est requise
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Niveau *</label>
+              <select class="form-control" formControlName="level">
+                <option value="Débutant">Débutant</option>
+                <option value="Intermédiaire">Intermédiaire</option>
+                <option value="Avancé">Avancé</option>
+              </select>
+            </div>
+            
+            <hr>
+            <h4>Questions</h4>
+            
+            <div formArrayName="questions">
+              <div *ngFor="let question of questions.controls; let i = index" [formGroupName]="i" class="card mb-3">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <h5>Question {{ i + 1 }}</h5>
+                    <button type="button" class="btn btn-danger btn-sm" (click)="removeQuestion(i)">Supprimer</button>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Texte de la question *</label>
+                    <input type="text" class="form-control" formControlName="text">
+                  </div>
+                  
+                  <div formArrayName="answers">
+                    <div *ngFor="let answer of getAnswers(i).controls; let j = index">
+                      <div class="mb-2">
+                        <label class="form-label">Réponse {{ getLetter(j) }} *</label>
+                        <input type="text" class="form-control" [formControlName]="j">
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Index de la bonne réponse (0-3) *</label>
+                    <select class="form-control" formControlName="correctIndex">
+                      <option value="0">A - Réponse 0</option>
+                      <option value="1">B - Réponse 1</option>
+                      <option value="2">C - Réponse 2</option>
+                      <option value="3">D - Réponse 3</option>
+                    </select>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Explication (optionnel)</label>
+                    <textarea class="form-control" rows="2" formControlName="explanation"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <button type="button" class="btn btn-secondary mb-3" (click)="addQuestion()">
+              <i class="fa fa-plus"></i> Ajouter une question
+            </button>
+            
+            <div class="d-flex justify-content-between mt-3">
+              <button type="button" class="btn btn-secondary" routerLink="/teacher/my-quizzes">Annuler</button>
+              <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Mettre à jour' : 'Créer' }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

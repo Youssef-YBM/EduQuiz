@@ -1,0 +1,92 @@
+<div class="container mt-4" *ngIf="quiz && !quizCompleted">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <!-- Quiz Header -->
+      <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">{{ quiz.title }}</h4>
+            <app-timer 
+              [initialSeconds]="300" 
+              (timeUp)="onTimeUp()">
+            </app-timer>
+          </div>
+        </div>
+        
+        <div class="card-body">
+          <!-- Progress -->
+          <div class="mb-4">
+            <div class="d-flex justify-content-between mb-2">
+              <span>Question {{ currentQuestionIndex + 1 }} / {{ quiz.questions.length }}</span>
+            </div>
+            <div class="progress">
+              <div class="progress-bar bg-success" 
+                   [style.width.%]="getProgressPercentage()">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Question -->
+          <div class="question-container mb-4">
+            <h4>{{ currentQuestion?.text }}</h4>
+          </div>
+          
+          <!-- Answers -->
+          <div class="answers-container mb-4" *ngIf="currentQuestion">
+            <div *ngFor="let answer of currentQuestion.answers; let i = index" 
+                 class="answer-option mb-2">
+              <button class="btn w-100 text-start" 
+                      [class.btn-outline-primary]="selectedAnswerIndex !== i"
+                      [class.btn-primary]="selectedAnswerIndex === i && !showAnswerFeedback"
+                      [class.btn-success]="showAnswerFeedback && i === currentQuestion.correctIndex"
+                      [class.btn-danger]="showAnswerFeedback && selectedAnswerIndex === i && i !== currentQuestion.correctIndex"
+                      [disabled]="showAnswerFeedback || timeUp"
+                      (click)="selectAnswer(i)">
+                <span class="me-2">{{ getLetter(i) }}.</span>
+                {{ answer }}
+              </button>
+            </div>
+          </div>
+          
+          <!-- Feedback -->
+          <div class="alert" 
+               [class.alert-success]="showAnswerFeedback && isCorrect(selectedAnswerIndex, currentQuestionIndex)"
+               [class.alert-danger]="showAnswerFeedback && !isCorrect(selectedAnswerIndex, currentQuestionIndex)"
+               *ngIf="showAnswerFeedback && currentQuestion">
+            <strong>
+              <i class="fa" [class.fa-check-circle]="isCorrect(selectedAnswerIndex, currentQuestionIndex)"
+                          [class.fa-times-circle]="!isCorrect(selectedAnswerIndex, currentQuestionIndex)">
+              </i>
+              {{ isCorrect(selectedAnswerIndex, currentQuestionIndex) ? 'Bonne réponse !' : 'Mauvaise réponse' }}
+            </strong>
+            <p class="mt-2 mb-0">{{ currentQuestion.explanation }}</p>
+          </div>
+          
+          <!-- Navigation - LIGNE CORRIGÉE -->
+          <div class="d-flex justify-content-between mt-4">
+            <button class="btn btn-secondary" 
+                    [disabled]="currentQuestionIndex === 0"
+                    (click)="previousQuestion()">
+              <i class="fa fa-arrow-left"></i> Précédent
+            </button>
+            
+            <button class="btn btn-primary" 
+                    *ngIf="!showAnswerFeedback"
+                    [disabled]="selectedAnswerIndex === -1"
+                    (click)="validateAnswer()">
+              Valider <i class="fa fa-arrow-right"></i>
+            </button>
+            
+            <!-- CORRECTION ICI : Pas besoin de ? car quiz est garanti non-null -->
+            <button class="btn btn-primary" 
+                    *ngIf="showAnswerFeedback"
+                    (click)="nextQuestion()">
+              {{ currentQuestionIndex + 1 === quiz.questions.length ? 'Terminer' : 'Suivant' }}
+              <i class="fa fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

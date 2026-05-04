@@ -1,0 +1,29 @@
+<div class="container mt-4">
+  <div class="row mb-4">
+    <div class="col">
+      <h2><i class="fa fa-chart-line me-2"></i>Tous les scores</h2>
+      <p class="text-muted">Vue d'ensemble de tous les résultats</p>
+    </div>
+  </div>
+  
+  <div class="card shadow">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead class="table-light">
+            <tr><th>Étudiant</th><th>Quiz</th><th>Score</th><th>Réponses</th><th>Date</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let score of scores">
+              <td>{{ score.userName }}</td>
+              <td>{{ score.quizTitle }}</td>
+              <td><span class="badge {{ getScoreBadge(score.score) }}">{{ score.score | number:'1.0-0' }}%</span></td>
+              <td>{{ score.correctAnswers }} / {{ score.totalQuestions }}</td>
+              <td>{{ formatDate(score.date) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+          <h3 class="mb-0">
+            <i class="fa fa-graduation-cap me-2"></i>
+            EDU-QUIZZ
+          </h3>
+        </div>
+        
+        <div class="card-body p-4">
+          <div class="alert alert-info small">
+            <strong><i class="fa fa-info-circle"></i> Comptes de démonstration:</strong><br>
+            - student@eduquiz.ma (Étudiant)<br>
+            - teacher@eduquiz.ma (Enseignant)<br>
+            - admin@eduquiz.ma (Administrateur)
+          </div>
+          
+          <form *ngIf="!showRegister" (ngSubmit)="login()">
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="email" name="email" required>
+            </div>
+            
+            <div class="alert alert-danger" *ngIf="errorMessage">
+              {{ errorMessage }}
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="fa fa-sign-in"></i> Connexion
+            </button>
+            
+            <hr>
+            
+            <div class="text-center">
+              <a href="#" (click)="toggleRegister(); $event.preventDefault()">
+                Pas encore de compte ? S'inscrire
+              </a>
+            </div>
+          </form>
+          
+          <form *ngIf="showRegister" (ngSubmit)="register()">
+            <div class="mb-3">
+              <label class="form-label">Nom complet</label>
+              <input type="text" class="form-control" [(ngModel)]="name" name="name" required>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="email" name="email" required>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Je suis</label>
+              <select class="form-control" [(ngModel)]="registerRole" name="role">
+                <option value="student">Étudiant</option>
+                <option value="teacher">Enseignant</option>
+              </select>
+            </div>
+            
+            <div class="alert alert-success" *ngIf="successMessage">
+              <i class="fa fa-check-circle"></i> {{ successMessage }}
+            </div>
+            
+            <div class="alert alert-danger" *ngIf="errorMessage">
+              {{ errorMessage }}
+            </div>
+            
+            <button type="submit" class="btn btn-success w-100">
+              <i class="fa fa-user-plus"></i> S'inscrire
+            </button>
+            
+            <hr>
+            
+            <div class="text-center">
+              <a href="#" (click)="toggleRegister(); $event.preventDefault()">
+                Déjà un compte ? Se connecter
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

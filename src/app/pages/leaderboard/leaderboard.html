@@ -1,0 +1,29 @@
+<div class="container mt-4">
+  <div class="row mb-4">
+    <div class="col">
+      <h2><i class="fa fa-ranking-star me-2"></i>Classement général</h2>
+      <p class="text-muted">Les meilleurs scores de la plateforme</p>
+    </div>
+  </div>
+  
+  <div class="card shadow">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead class="table-light">
+            <tr><th>Rang</th><th>Étudiant</th><th>Quiz</th><th>Score</th><th>Date</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let score of leaderboard; let i = index">
+              <td><span class="h5">{{ getMedal(i) }}</span></td>
+              <td>{{ score.userName }}</td>
+              <td>{{ score.quizTitle }}</td>
+              <td><span class="badge {{ getScoreBadge(score.score) }} p-2">{{ score.score | number:'1.0-0' }}%</span></td>
+              <td>{{ score.date | date:'dd/MM/yyyy' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
