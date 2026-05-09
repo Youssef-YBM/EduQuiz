@@ -1,10 +1,14 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-timer',
+  standalone: true,
+  imports: [CommonModule],  // 👈 AJOUTER CETTE LIGNE
   templateUrl: './timer.html',
   styleUrls: ['./timer.css']
 })
+
 export class TimerComponent implements OnInit, OnDestroy {
   @Input() initialSeconds = 300;
   @Output() timeUp = new EventEmitter<void>();

@@ -1,8 +1,7 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg fixed-top">
   <div class="container">
     <a class="navbar-brand" routerLink="/">
-      <i class="fa fa-graduation-cap me-2"></i>
-      EDU-QUIZZ
+      ✨ EDU-QUIZZ
     </a>
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -15,12 +14,12 @@
         <ng-container *ngIf="authService.getCurrentUser()?.role === 'student'">
           <li class="nav-item">
             <a class="nav-link" routerLink="/student/quiz-list" routerLinkActive="active">
-              <i class="fa fa-list me-1"></i> Quiz
+              🎯 Quiz
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/student/history" routerLinkActive="active">
-              <i class="fa fa-history me-1"></i> Mon historique
+              📊 Historique
             </a>
           </li>
         </ng-container>
@@ -29,12 +28,12 @@
         <ng-container *ngIf="authService.getCurrentUser()?.role === 'teacher'">
           <li class="nav-item">
             <a class="nav-link" routerLink="/teacher/my-quizzes" routerLinkActive="active">
-              <i class="fa fa-book me-1"></i> Mes quiz
+              📚 Mes quiz
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/teacher/quiz-scores" routerLinkActive="active">
-              <i class="fa fa-trophy me-1"></i> Scores
+              🏆 Scores
             </a>
           </li>
         </ng-container>
@@ -43,25 +42,25 @@
         <ng-container *ngIf="authService.getCurrentUser()?.role === 'admin'">
           <li class="nav-item">
             <a class="nav-link" routerLink="/admin/all-quizzes" routerLinkActive="active">
-              <i class="fa fa-database me-1"></i> Tous les quiz
+              🗂️ Quiz
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/admin/user-management" routerLinkActive="active">
-              <i class="fa fa-users me-1"></i> Utilisateurs
+              👥 Utilisateurs
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/admin/all-scores" routerLinkActive="active">
-              <i class="fa fa-chart-line me-1"></i> Scores
+              📈 Scores
             </a>
           </li>
         </ng-container>
         
-        <!-- Common Menu -->
+        <!-- Leaderboard -->
         <li class="nav-item">
           <a class="nav-link" routerLink="/leaderboard" routerLinkActive="active">
-            <i class="fa fa-ranking-star me-1"></i> Classement
+            🥇 Classement
           </a>
         </li>
       </ul>
@@ -69,20 +68,17 @@
       <ul class="navbar-nav" *ngIf="authService.isLoggedIn(); else loginButton">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-            <i class="fa fa-user-circle me-1"></i>
-            {{ authService.getCurrentUser()?.name }}
+            👤 {{ authService.getCurrentUser()?.name }}
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#" (click)="logout()">
-              <i class="fa fa-sign-out"></i> Déconnexion
-            </a></li>
+            <li><a class="dropdown-item" href="#" (click)="logout()">🚪 Déconnexion</a></li>
           </ul>
         </li>
       </ul>
       
       <ng-template #loginButton>
         <a class="btn btn-outline-light" routerLink="/login">
-          <i class="fa fa-sign-in"></i> Connexion
+          🔑 Connexion
         </a>
       </ng-template>
     </div>

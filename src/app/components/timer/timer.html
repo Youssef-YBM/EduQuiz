@@ -1,9 +1,13 @@
 <div class="text-center">
-  <div class="progress mb-2" style="height: 5px;">
-    <div class="progress-bar" [style.width.%]="getProgressPercentage()"></div>
+  <div class="progress mb-3" style="height: 6px;">
+    <div class="progress-bar" [style.width.%]="getProgressPercentage()"
+         [class.bg-warning]="timeLeft < 60"
+         [class.bg-danger]="timeLeft < 30">
+    </div>
   </div>
-  <div>
-    <i class="fa fa-hourglass-half me-1"></i>
-    <span style="font-size: 1.5rem; font-weight: bold;">{{ getFormattedTime() }}</span>
+  <div class="d-inline-block px-4 py-2 rounded-pill bg-glass">
+    <span class="fw-bold" [ngStyle]="{'color': timeLeft < 60 ? '#f59e0b' : timeLeft < 30 ? '#ef4444' : '#4f46e5'}">
+      ⏱️ {{ getFormattedTime() }}
+    </span>
   </div>
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';  // <-- AJOUTER CET IMPORT
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Quiz } from '../../../models/quiz.model';
 import { QuizService } from '../../../services/quiz.service';
@@ -7,8 +7,8 @@ import { QuizService } from '../../../services/quiz.service';
 @Component({
   selector: 'app-quiz-result',
   standalone: true,
-  imports: [CommonModule],  // <-- AJOUTER CommonModule DANS imports
-  templateUrl: './quiz-result.html',  // Vérifiez le nom du fichier
+  imports: [CommonModule],
+  templateUrl: './quiz-result.html',
   styleUrls: ['./quiz-result.css']
 })
 export class QuizResultComponent implements OnInit {
@@ -18,6 +18,7 @@ export class QuizResultComponent implements OnInit {
   correctAnswers: number = 0;
   timeSpent: number = 0;
   totalQuestions: number = 0;
+  expandedIndex: number = -1;
 
   constructor(
     private route: ActivatedRoute,
@@ -45,6 +46,14 @@ export class QuizResultComponent implements OnInit {
     
     if (!this.quiz) {
       this.router.navigate(['/student/quiz-list']);
+    }
+  }
+
+  toggleQuestion(index: number): void {
+    if (this.expandedIndex === index) {
+      this.expandedIndex = -1;
+    } else {
+      this.expandedIndex = index;
     }
   }
 

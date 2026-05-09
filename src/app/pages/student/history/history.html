@@ -1,77 +1,90 @@
-<div class="container mt-4">
-  <div class="row">
-    <div class="col">
-      <h2><i class="fa fa-history me-2"></i>Mon historique</h2>
-      <p class="text-muted">Consultez vos résultats passés et votre progression</p>
+<!-- history.html - Version Premium -->
+<div class="container mt-4 pt-3">
+  <div class="row mb-5">
+    <div class="col text-center">
+      <h1 class="display-4 fw-bold text-gradient mb-3">📊 Mon historique</h1>
+      <p class="text-white-50 fs-5">Consultez vos résultats et votre progression</p>
     </div>
   </div>
   
-  <div class="row mb-4">
+  <!-- Statistiques Cards -->
+  <div class="row mb-5 g-4">
     <div class="col-md-3">
-      <div class="card text-center shadow-sm">
-        <div class="card-body">
-          <i class="fa fa-book fa-2x text-primary"></i>
-          <h3 class="mt-2">{{ statistics.totalQuizzes }}</h3>
-          <p class="text-muted">Quiz complétés</p>
-        </div>
+      <div class="stats-card glass-card text-center p-4">
+        <div class="stats-icon mb-3">📚</div>
+        <div class="stats-value">{{ statistics.totalQuizzes }}</div>
+        <div class="stats-label">Quiz complétés</div>
       </div>
     </div>
     
     <div class="col-md-3">
-      <div class="card text-center shadow-sm">
-        <div class="card-body">
-          <i class="fa fa-chart-line fa-2x text-success"></i>
-          <h3 class="mt-2">{{ statistics.averageScore }}%</h3>
-          <p class="text-muted">Moyenne générale</p>
-        </div>
+      <div class="stats-card glass-card text-center p-4">
+        <div class="stats-icon mb-3">📈</div>
+        <div class="stats-value">{{ statistics.averageScore }}%</div>
+        <div class="stats-label">Moyenne générale</div>
       </div>
     </div>
     
     <div class="col-md-3">
-      <div class="card text-center shadow-sm">
-        <div class="card-body">
-          <i class="fa fa-trophy fa-2x text-warning"></i>
-          <h3 class="mt-2">{{ statistics.bestScore }}%</h3>
-          <p class="text-muted">Meilleur score</p>
-        </div>
+      <div class="stats-card glass-card text-center p-4">
+        <div class="stats-icon mb-3">🏆</div>
+        <div class="stats-value">{{ statistics.bestScore }}%</div>
+        <div class="stats-label">Meilleur score</div>
       </div>
     </div>
     
     <div class="col-md-3">
-      <div class="card text-center shadow-sm">
-        <div class="card-body">
-          <i class="fa fa-question-circle fa-2x text-info"></i>
-          <h3 class="mt-2">{{ statistics.totalQuestions }}</h3>
-          <p class="text-muted">Questions répondues</p>
-        </div>
+      <div class="stats-card glass-card text-center p-4">
+        <div class="stats-icon mb-3">❓</div>
+        <div class="stats-value">{{ statistics.totalQuestions }}</div>
+        <div class="stats-label">Questions répondues</div>
       </div>
     </div>
   </div>
   
-  <div class="card shadow">
-    <div class="card-header bg-primary text-white">
-      <h5 class="mb-0">Scores détaillés</h5>
+  <!-- Tableau des scores -->
+  <div class="glass-card p-4">
+    <h3 class="mb-4 fs-2 fw-semibold">📋 Scores détaillés</h3>
+    
+    <div class="table-responsive" *ngIf="scores.length > 0; else noScores">
+      <table class="premium-table">
+        <thead>
+          <tr>
+            <th>Quiz</th>
+            <th>Score</th>
+            <th>Réponses</th>
+            <th>Temps</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let score of scores">
+            <td class="fw-semibold">{{ score.quizTitle }}</td>
+            <td>
+              <div class="score-badge" [class.score-excellent]="score.score >= 80"
+                                         [class.score-good]="score.score >= 60 && score.score < 80"
+                                         [class.score-average]="score.score >= 40 && score.score < 60"
+                                         [class.score-poor]="score.score < 40">
+                {{ score.score | number:'1.0-0' }}%
+              </div>
+            </td>
+            <td>{{ score.correctAnswers }} / {{ score.totalQuestions }}</td>
+            <td>⏱️ {{ formatTime(score.timeSpent || 0) }}</td>
+            <td>{{ formatDate(score.date) }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="card-body">
-      <div class="table-responsive" *ngIf="scores.length > 0; else noScores">
-        <table class="table table-hover">
-          <thead class="table-light">
-            <tr><th>Quiz</th><th>Score</th><th>Réponses</th><th>Temps</th><th>Date</th></tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let score of scores">
-              <td><strong>{{ score.quizTitle }}</strong></td>
-              <td><span class="badge {{ getScoreBadge(score.score) }} p-2">{{ score.score | number:'1.0-0' }}%</span></td>
-              <td>{{ score.correctAnswers }} / {{ score.totalQuestions }}</td>
-              <td>{{ formatTime(score.timeSpent || 0) }}</td>
-              <td>{{ formatDate(score.date) }}</td>
-            </tr>
-          </tbody>
-        </table>
+    
+    <ng-template #noScores>
+      <div class="empty-state text-center py-5">
+        <div class="empty-icon mb-3">🎯</div>
+        <h4 class="text-white-50">Aucun quiz complété</h4>
+        <p class="text-white-50">Commencez un quiz pour voir vos résultats ici !</p>
+        <button class="btn btn-primary mt-3" routerLink="/student/quiz-list">
+          🚀 Découvrir les quiz
+        </button>
       </div>
-      <ng-template #noScores>
-        <div class="alert alert-info text-center">Vous n'avez encore passé aucun quiz</div>
-      </ng-template>
-    </div>
+    </ng-template>
   </div>
 </div>

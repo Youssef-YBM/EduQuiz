@@ -18,6 +18,7 @@ export class QuizResultComponent implements OnInit {
   correctAnswers: number = 0;
   timeSpent: number = 0;
   totalQuestions: number = 0;
+  expandedIndex: number = -1;  // 👈 PROPRIÉTÉ AJOUTÉE
 
   constructor(
     private route: ActivatedRoute,
@@ -29,7 +30,6 @@ export class QuizResultComponent implements OnInit {
     const quizId = this.route.snapshot.paramMap.get('id');
     if (quizId) {
       const quiz = this.quizService.getQuizById(quizId);
-      // Correction: convertir undefined en null
       this.quiz = quiz || null;
     }
     
@@ -46,6 +46,15 @@ export class QuizResultComponent implements OnInit {
     
     if (!this.quiz) {
       this.router.navigate(['/student/quiz-list']);
+    }
+  }
+
+  // 👈 MÉTHODE AJOUTÉE
+  toggleQuestion(index: number): void {
+    if (this.expandedIndex === index) {
+      this.expandedIndex = -1;
+    } else {
+      this.expandedIndex = index;
     }
   }
 

@@ -1,90 +1,80 @@
-<div class="container mt-4" *ngIf="quiz && !quizCompleted">
+<!-- quiz-play.html - Version Premium -->
+<div class="container mt-4 pt-3" *ngIf="quiz && !quizCompleted">
   <div class="row">
-    <div class="col-md-8 mx-auto">
-      <!-- Quiz Header -->
-      <div class="card shadow mb-4">
-        <div class="card-header bg-primary text-white">
-          <div class="d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">{{ quiz.title }}</h4>
-            <app-timer 
-              [initialSeconds]="300" 
-              (timeUp)="onTimeUp()">
-            </app-timer>
+    <div class="col-lg-8 mx-auto">
+      <!-- En-tête du quiz -->
+      <div class="glass-card p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <div>
+            <h2 class="mb-1 text-gradient">{{ quiz.title }}</h2>
+            <p class="text-white-50 mb-0">{{ quiz.description | slice:0:60 }}</p>
+          </div>
+          <app-timer [initialSeconds]="300" (timeUp)="onTimeUp()"></app-timer>
+        </div>
+      </div>
+      
+      <!-- Zone de question -->
+      <div class="quiz-question-card glass-card p-4">
+        <!-- Progression -->
+        <div class="mb-4">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-white-50">Question {{ currentQuestionIndex + 1 }}/{{ quiz.questions.length }}</span>
+          </div>
+          <div class="progress premium-progress">
+            <div class="progress-bar bg-gradient-primary" [style.width.%]="getProgressPercentage()"></div>
           </div>
         </div>
         
-        <div class="card-body">
-          <!-- Progress -->
-          <div class="mb-4">
-            <div class="d-flex justify-content-between mb-2">
-              <span>Question {{ currentQuestionIndex + 1 }} / {{ quiz.questions.length }}</span>
-            </div>
-            <div class="progress">
-              <div class="progress-bar bg-success" 
-                   [style.width.%]="getProgressPercentage()">
-              </div>
-            </div>
+        <!-- Texte de la question -->
+        <h3 class="question-text mb-4">{{ currentQuestion?.text }}</h3>
+        
+        <!-- Options de réponse -->
+        <div class="answers-grid mb-4" *ngIf="currentQuestion">
+          <button *ngFor="let answer of currentQuestion.answers; let i = index" 
+                  class="answer-btn w-100 text-start p-3"
+                  [class.answer-selected]="selectedAnswerIndex === i && !showAnswerFeedback"
+                  [class.answer-correct]="showAnswerFeedback && i === currentQuestion.correctIndex"
+                  [class.answer-wrong]="showAnswerFeedback && selectedAnswerIndex === i && i !== currentQuestion.correctIndex"
+                  [disabled]="showAnswerFeedback || timeUp"
+                  (click)="selectAnswer(i)">
+            <span class="answer-letter">{{ getLetter(i) }}</span>
+            <span class="answer-text">{{ answer }}</span>
+          </button>
+        </div>
+        
+        <!-- Feedback -->
+        <div class="feedback-alert" *ngIf="showAnswerFeedback && currentQuestion"
+             [class.feedback-success]="isCorrect(selectedAnswerIndex, currentQuestionIndex)"
+             [class.feedback-error]="!isCorrect(selectedAnswerIndex, currentQuestionIndex)">
+          <div class="feedback-icon">
+            {{ isCorrect(selectedAnswerIndex, currentQuestionIndex) ? '🎉' : '😔' }}
           </div>
+          <div class="feedback-content">
+            <strong>{{ isCorrect(selectedAnswerIndex, currentQuestionIndex) ? 'Bonne réponse !' : 'Mauvaise réponse' }}</strong>
+            <p class="mb-0 mt-1">{{ currentQuestion.explanation }}</p>
+          </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="d-flex justify-content-between gap-3 mt-4">
+          <button class="btn btn-secondary" 
+                  [disabled]="currentQuestionIndex === 0"
+                  (click)="previousQuestion()">
+            ← Précédent
+          </button>
           
-          <!-- Question -->
-          <div class="question-container mb-4">
-            <h4>{{ currentQuestion?.text }}</h4>
-          </div>
+          <button class="btn btn-success flex-grow-1" 
+                  *ngIf="!showAnswerFeedback"
+                  [disabled]="selectedAnswerIndex === -1"
+                  (click)="validateAnswer()">
+            ✅ Valider
+          </button>
           
-          <!-- Answers -->
-          <div class="answers-container mb-4" *ngIf="currentQuestion">
-            <div *ngFor="let answer of currentQuestion.answers; let i = index" 
-                 class="answer-option mb-2">
-              <button class="btn w-100 text-start" 
-                      [class.btn-outline-primary]="selectedAnswerIndex !== i"
-                      [class.btn-primary]="selectedAnswerIndex === i && !showAnswerFeedback"
-                      [class.btn-success]="showAnswerFeedback && i === currentQuestion.correctIndex"
-                      [class.btn-danger]="showAnswerFeedback && selectedAnswerIndex === i && i !== currentQuestion.correctIndex"
-                      [disabled]="showAnswerFeedback || timeUp"
-                      (click)="selectAnswer(i)">
-                <span class="me-2">{{ getLetter(i) }}.</span>
-                {{ answer }}
-              </button>
-            </div>
-          </div>
-          
-          <!-- Feedback -->
-          <div class="alert" 
-               [class.alert-success]="showAnswerFeedback && isCorrect(selectedAnswerIndex, currentQuestionIndex)"
-               [class.alert-danger]="showAnswerFeedback && !isCorrect(selectedAnswerIndex, currentQuestionIndex)"
-               *ngIf="showAnswerFeedback && currentQuestion">
-            <strong>
-              <i class="fa" [class.fa-check-circle]="isCorrect(selectedAnswerIndex, currentQuestionIndex)"
-                          [class.fa-times-circle]="!isCorrect(selectedAnswerIndex, currentQuestionIndex)">
-              </i>
-              {{ isCorrect(selectedAnswerIndex, currentQuestionIndex) ? 'Bonne réponse !' : 'Mauvaise réponse' }}
-            </strong>
-            <p class="mt-2 mb-0">{{ currentQuestion.explanation }}</p>
-          </div>
-          
-          <!-- Navigation - LIGNE CORRIGÉE -->
-          <div class="d-flex justify-content-between mt-4">
-            <button class="btn btn-secondary" 
-                    [disabled]="currentQuestionIndex === 0"
-                    (click)="previousQuestion()">
-              <i class="fa fa-arrow-left"></i> Précédent
-            </button>
-            
-            <button class="btn btn-primary" 
-                    *ngIf="!showAnswerFeedback"
-                    [disabled]="selectedAnswerIndex === -1"
-                    (click)="validateAnswer()">
-              Valider <i class="fa fa-arrow-right"></i>
-            </button>
-            
-            <!-- CORRECTION ICI : Pas besoin de ? car quiz est garanti non-null -->
-            <button class="btn btn-primary" 
-                    *ngIf="showAnswerFeedback"
-                    (click)="nextQuestion()">
-              {{ currentQuestionIndex + 1 === quiz.questions.length ? 'Terminer' : 'Suivant' }}
-              <i class="fa fa-arrow-right"></i>
-            </button>
-          </div>
+          <button class="btn btn-primary flex-grow-1" 
+                  *ngIf="showAnswerFeedback"
+                  (click)="nextQuestion()">
+            {{ currentQuestionIndex + 1 === quiz.questions.length ? '🏁 Terminer' : 'Suivant →' }}
+          </button>
         </div>
       </div>
     </div>

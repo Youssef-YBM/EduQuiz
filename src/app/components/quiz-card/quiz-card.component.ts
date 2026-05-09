@@ -17,7 +17,7 @@ export class QuizCardComponent {
   @Output() delete = new EventEmitter<Quiz>();
   @Output() play = new EventEmitter<Quiz>();
 
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService) { }
 
   onEdit(): void {
     this.edit.emit(this.quiz);
@@ -33,6 +33,7 @@ export class QuizCardComponent {
     this.play.emit(this.quiz);
   }
 
+  // Mettez à jour getLevelClass dans quiz-card.component.ts
   getLevelClass(): string {
     switch (this.quiz.level) {
       case 'Débutant': return 'bg-success';

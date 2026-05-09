@@ -1,29 +1,35 @@
-<div class="card h-100 shadow-sm">
-  <div class="card-body">
-    <div class="d-flex justify-content-between align-items-start mb-2">
-      <h5 class="card-title text-primary">{{ quiz.title }}</h5>
-      <span class="badge {{ getLevelClass() }}">{{ quiz.level }}</span>
+<div class="card h-100 border-0 shadow-lg hover-lift">
+  <div class="card-body p-4">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <h5 class="card-title text-gradient mb-0">{{ quiz.title }}</h5>
+      <span class="badge {{ getLevelClass() }} px-3 py-2">
+        {{ quiz.level }}
+      </span>
     </div>
     
-    <p class="card-text text-muted">{{ quiz.description }}</p>
+    <p class="card-text text-muted mb-3">{{ quiz.description }}</p>
     
-    <div class="d-flex justify-content-between align-items-center mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
       <small class="text-muted">
-        <i class="fa fa-question-circle"></i> {{ quiz.questions.length }} questions
+        📋 {{ quiz.questions.length }} questions
+      </small>
+      <small class="text-muted" *ngIf="quiz.ownerName">
+        👤 {{ quiz.ownerName }}
       </small>
     </div>
     
-    <div class="d-flex gap-2 mt-3">
-      <button class="btn btn-success btn-sm" (click)="onPlay()" *ngIf="authService.getCurrentUser()?.role === 'student'">
-        <i class="fa fa-play"></i> Jouer
+    <div class="d-flex gap-2">
+      <button class="btn btn-success btn-sm flex-grow-1" (click)="onPlay()" 
+              *ngIf="authService.getCurrentUser()?.role === 'student'">
+        🎯 Jouer
       </button>
       
       <ng-container *ngIf="showActions">
         <button class="btn btn-warning btn-sm" (click)="onEdit()">
-          <i class="fa fa-edit"></i> Modifier
+          ✏️
         </button>
         <button class="btn btn-danger btn-sm" (click)="onDelete()">
-          <i class="fa fa-trash"></i> Supprimer
+          🗑️
         </button>
       </ng-container>
     </div>
