@@ -1,17 +1,34 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
-# Compiled output
+# ===== COMPILED OUTPUT =====
 /dist
 /tmp
 /out-tsc
 /bazel-out
+/dist/out-tsc
 
-# Node
+# ===== DEPENDENCIES =====
 /node_modules
 npm-debug.log
 yarn-error.log
+package-lock.json
+yarn.lock
 
-# IDEs and editors
+# ===== ANGULAR CACHE =====
+/.angular
+.angular/cache
+.angular/cli
+.angular/tsbuildinfo
+
+# ===== TESTING & COVERAGE =====
+/coverage
+/coverage/*
+/.nyc_output
+testem.log
+/typings
+__screenshots__
+
+# ===== IDEs & EDITORS =====
 .idea/
 .project
 .classpath
@@ -19,6 +36,7 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
+*.sublime-project
 
 # Visual Studio Code
 .vscode/*
@@ -28,17 +46,58 @@ yarn-error.log
 !.vscode/extensions.json
 !.vscode/mcp.json
 .history/*
+*.code-workspace
 
-# Miscellaneous
-/.angular/cache
+# WebStorm
+.idea/
+*.iml
+
+# ===== SYSTEM FILES =====
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.tmp
+*.temp
+*.log
+
+# ===== OS GENERATED =====
+Desktop.ini
+$RECYCLE.BIN/
+
+# ===== ENVIRONMENT FILES =====
+.env
+.env.local
+.env.production
+.env.development
+.env.test
+
+# ===== ANGULAR SPECIFIC =====
+/backup
+/.fleet
+/.vscode
+.angular/cache
+.angular/state
+.angular/tsbuildinfo
+
+# ===== MISCELLANEOUS =====
 .sass-cache/
 /connect.lock
-/coverage
 /libpeerconnection.log
-testem.log
-/typings
-__screenshots__/
+*.pid
+*.seed
+*.pid.lock
+*.tgz
+*.swp
+*.swo
+*~
 
-# System files
-.DS_Store
-Thumbs.db
+# ===== PROJECT SPECIFIC =====
+/e2e
+/e2e/*
+/screenshots
+/test-results
+/dist-ssr
